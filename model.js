@@ -15,10 +15,12 @@ const jobPostingSchema = new Schema({
 	rejected: Boolean,
 });
 
-const appTrackerSchema = new Schema({
+const userSchema = new Schema({
 	username: String,
 	jobsApplied: [jobPostingSchema],
 });
 
-const JobPostingModel = mongoose.model('JobPosting', jobPostingSchema);
-const AppTrackerModel = mongoose.model('AppTracker', appTrackerSchema);
+const JobPosting = mongoose.model('JobPosting', jobPostingSchema);
+const User = mongoose.model('User', userSchema);
+
+export default User;

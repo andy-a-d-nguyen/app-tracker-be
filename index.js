@@ -10,6 +10,7 @@ mongoose
 	.connect('mongodb://localhost:27017/appTracker')
 	.then(() => console.log('connected'))
 	.catch((err) => console.err(err));
+mongoose.connection.on('error', (err) => console.error(err));
 
 app.use(cors());
 app.use(express.json());
