@@ -1,5 +1,5 @@
 import express from 'express';
-import { JobPosting, User } from './model.js';
+import User from './model.js';
 
 const router = express.Router();
 
@@ -17,22 +17,30 @@ router.post('/user', async (req, res) => {
 			jobsApplied: [],
 		})
 			.then(() => res.sendStatus(200))
-			.catch((error) => res.status(500).send(error));
+			.catch((err) => res.status(500).send(err));
 	}
 });
 
 // get user
 router.get('/user/:id', async (req, res) => {
-	await User.exists({ username: req.params.id })
-		.then((user) => res.status(200).send(user))
-		.catch(() => res.sendStatus(404));
+	if ((await User.exists({ username: req.params.id })) == null) {
+		res.sendStatus(404);
+	} else {
+		await User.findOne({ username: req.params.id })
+			.then((user) => res.status(200).send(user))
+			.catch((err) => res.status(500).send(err));
+	}
 });
 
 // delete user
 router.delete('/user/:id', async (req, res) => {
-	await User.findOneAndDelete({ username: req.params.id })
-		.then(() => res.sendStatus(200))
-		.catch((err) => res.status(500).send(err));
+	if ((await User.exists({ username: req.params.id })) == null) {
+		res.sendStatus(404);
+	} else {
+		await User.findOneAndDelete({ username: req.params.id })
+			.then(() => res.sendStatus(200))
+			.catch((err) => res.status(500).send(err));
+	}
 });
 
 // create job
@@ -46,13 +54,32 @@ router.post('/user/:id/jobs', async (req, res) => {
 		.catch((err) => res.status(500).send(err));
 });
 
-// get jobs
-router.get('/user/:id/jobs', (req, res) => {});
-
 // update job
-router.put('/user/:id/jobs/:id', (req, res) => {});
+router.put('/user/:id/jobs/:index', async (req, res) => {
+	User.findOne({ username: req.params.id }, async (err, user) => {
+		if (err) res.status(500).send(err);
+		else {
+			user.jobsApplied[req.params.index] = req.body;
+			await user
+				.save()
+				.then(() => res.sendStatus(200))
+				.catch((error) => res.status(500).send(error));
+		}
+	});
+});
 
 // delete job
-router.delete('/user/:id/jobs/:id', (req, res) => {});
+router.delete('/user/:id/jobs/:index', (req, res) => {
+	User.findOne({ username: req.params.id }, async (err, user) => {
+		if (err) res.status(500).send(err);
+		else {
+			user.jobsApplied.splice(req.params.index, 1);
+			await user
+				.save()
+				.then(() => res.sendStatus(200))
+				.catch((error) => res.status(500).send(error));
+		}
+	});
+});
 
 export default router;
