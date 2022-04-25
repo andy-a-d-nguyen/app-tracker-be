@@ -23,4 +23,4 @@ const userSchema = new Schema({
 const JobPosting = mongoose.model('JobPosting', jobPostingSchema);
 const User = mongoose.model('User', userSchema);
 
-export default User;
+export { JobPosting, User };
