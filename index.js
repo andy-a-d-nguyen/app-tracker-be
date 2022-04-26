@@ -20,7 +20,7 @@ const config = {
 mongoose
 	.connect('mongodb://localhost:27017/appTracker')
 	.then(() => console.log('connected'))
-	.catch((err) => console.err(err));
+	.catch((err) => console.error(err));
 mongoose.connection.on('error', (err) => console.error(err));
 
 app.use(cors());
