@@ -1,10 +1,17 @@
 import express from 'express';
+import pkg from 'express-openid-connect';
 import User from './model.js';
 
 const router = express.Router();
+const { requiresAuth } = pkg;
 
 router.get('/', (req, res) => {
+	console.log(req.oidc.user);
 	res.send('Hello World');
+});
+
+router.get('/profile', requiresAuth(), (req, res) => {
+	res.send(JSON.stringify(req.oidc.user));
 });
 
 // create user

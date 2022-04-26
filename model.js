@@ -20,7 +20,6 @@ const userSchema = new Schema({
 	jobsApplied: [jobPostingSchema],
 });
 
-const JobPosting = mongoose.model('JobPosting', jobPostingSchema);
 const User = mongoose.model('User', userSchema);
 
 export default User;
