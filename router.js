@@ -1,17 +1,27 @@
 import express from 'express';
-import pkg from 'express-openid-connect';
+import { expressjwt as jwt } from 'express-jwt';
+import jwksRsa from 'jwks-rsa';
 import User from './model.js';
 
 const router = express.Router();
-const { requiresAuth } = pkg;
+const audience = process.env.AUTH0_AUDIENCE;
+const domain = process.env.AUTH0_DOMAIN;
 
-router.get('/', (req, res) => {
-	console.log(req.oidc.user);
-	res.send('Hello World');
+const checkJwt = jwt({
+	secret: jwksRsa.expressJwtSecret({
+		cache: true,
+		rateLimit: true,
+		jwksRequestsPerMinute: 5,
+		jwksUri: `https://${domain}/.well-known/jwks.json`,
+	}),
+
+	audience: audience,
+	issuer: `https://${domain}/`,
+	algorithms: ['RS256'],
 });
 
-router.get('/profile', requiresAuth(), (req, res) => {
-	res.send(JSON.stringify(req.oidc.user));
+router.get('/', checkJwt, (req, res) => {
+	res.send('Hello World');
 });
 
 // create user
