@@ -20,26 +20,20 @@ const checkJwt = jwt({
 	algorithms: ['RS256'],
 });
 
-router.get('/', checkJwt, (req, res) => {
-	res.send('Hello World');
-});
-
 // create user
-router.post('/user', async (req, res) => {
-	if (await User.exists({ username: req.body.username })) {
-		res.status(400).send('Duplicate username');
-	} else {
+router.post('/user', checkJwt, async (req, res) => {
+	if (!User.exists({ username: req.body.username })) {
 		await User.create({
 			username: req.body.username,
 			jobsApplied: [],
 		})
-			.then(() => res.sendStatus(200))
+			.then((user) => res.status(200).send(user))
 			.catch((err) => res.status(500).send(err));
 	}
 });
 
 // get user
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', checkJwt, async (req, res) => {
 	if ((await User.exists({ username: req.params.id })) == null) {
 		res.sendStatus(404);
 	} else {
