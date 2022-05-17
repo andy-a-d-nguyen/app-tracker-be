@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import mongooseAutoPopulate from 'mongoose-autopopulate';
 
 const { Schema } = mongoose;
 
