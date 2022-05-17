@@ -91,20 +91,20 @@ router.post('/user/:id/jobs', checkJwt, (req, res) => {
 });
 
 // update job
-router.put( '/user/:id/jobs/:index', async ( req, res ) => {
+router.put('/user/:id/jobs/:index', async (req, res) => {
 	User.findOne({ username: req.params.id }, async (err, user) => {
-		if ( err ) {
-			res.status( 500 ).send( err )
+		if (err) {
+			res.status(500).send(err);
 		} else {
 			user.jobsApplied[req.params.index] = req.body.job;
 			await user
 				.save()
-				.then( ( updatedUser ) => {
-					res.status( 200 ).json( updatedUser );
-				} )
-				.catch( ( error ) => {
-					res.status( 500 ).send( error )
-				} );
+				.then((updatedUser) => {
+					res.status(200).json(updatedUser);
+				})
+				.catch((error) => {
+					res.status(500).send(error);
+				});
 		}
 	});
 });
@@ -112,18 +112,18 @@ router.put( '/user/:id/jobs/:index', async ( req, res ) => {
 // delete job
 router.delete('/user/:id/jobs/:index', (req, res) => {
 	User.findOne({ username: req.params.id }, async (err, user) => {
-		if ( err ) {
-			res.status( 500 ).send( err );
+		if (err) {
+			res.status(500).send(err);
 		} else {
 			user.jobsApplied.splice(req.params.index, 1);
 			await user
 				.save()
-				.then( ( updatedUser ) => {
-					res.status( 200 ).json(updatedUser);
-				} )
-				.catch( ( error ) => {
-					res.status( 500 ).send( error )
-				} );
+				.then((updatedUser) => {
+					res.status(200).json(updatedUser);
+				})
+				.catch((error) => {
+					res.status(500).send(error);
+				});
 		}
 	});
 });
