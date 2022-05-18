@@ -61,14 +61,20 @@ router.post('/user', checkJwt, (req, res) => {
 // });
 
 // delete user
-router.delete('/user/:id', async (req, res) => {
-	if ((await User.exists({ username: req.params.id })) === null) {
-		res.sendStatus(404);
-	} else {
-		await User.findOneAndDelete({ username: req.params.id })
-			.then(() => res.sendStatus(200))
-			.catch((err) => res.status(500).send(err));
-	}
+router.delete('/user/:id', checkJwt, (req, res) => {
+	User.findOne({ username: req.params.id }, async (err) => {
+		if (err) {
+			res.status(404).send(err);
+		} else {
+			await User.findOneAndDelete({ username: req.params.id })
+				.then(() => {
+					res.sendStatus(200);
+				})
+				.catch((error) => {
+					res.status(500).send(error);
+				});
+		}
+	});
 });
 
 // create job

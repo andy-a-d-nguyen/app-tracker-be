@@ -14,10 +14,10 @@ mongoose
 	.catch((err) => console.error(err));
 mongoose.connection.on('error', (err) => console.error(err));
 
-app.use(cors({origin: clientOrigin}));
+app.use(cors({ origin: clientOrigin }));
 app.use(express.json());
 app.use(router);
 
 app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`);
+	console.log(`Job Application tracker listening on port ${port}`);
 });
