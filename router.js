@@ -97,7 +97,7 @@ router.post('/user/:id/jobs', checkJwt, (req, res) => {
 });
 
 // update job
-router.put('/user/:id/jobs/:index', async (req, res) => {
+router.put('/user/:id/jobs/:index', checkJwt, async (req, res) => {
 	User.findOne({ username: req.params.id }, async (err, user) => {
 		if (err) {
 			res.status(500).send(err);
@@ -116,7 +116,7 @@ router.put('/user/:id/jobs/:index', async (req, res) => {
 });
 
 // delete job
-router.delete('/user/:id/jobs/:index', (req, res) => {
+router.delete('/user/:id/jobs/:index', checkJwt, (req, res) => {
 	User.findOne({ username: req.params.id }, async (err, user) => {
 		if (err) {
 			res.status(500).send(err);
