@@ -1,6 +1,8 @@
 import express from 'express';
 import { expressjwt as jwt } from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
+import axios from 'axios';
+import { parse, stringify } from 'flatted';
 import User from './db/model.js';
 
 const router = express.Router();
@@ -44,21 +46,17 @@ router.post('/user', checkJwt, (req, res) => {
 	});
 });
 
-// get user
-// router.get('/user/:id', checkJwt, async (req, res) => {
-// 	if ((await User.exists({ username: req.params.id })) === null) {
-// 		await User.create({
-// 			username: req.params.id,
-// 			jobsApplied: [],
-// 		})
-// 			.then((user) => res.status(200).send(user))
-// 			.catch((err) => res.status(500).send(err));
-// 	} else {
-// 		await User.findOne({ username: req.params.id })
-// 			.then((user) => res.status(200).send(user))
-// 			.catch((err) => res.status(500).send(err));
-// 	}
-// });
+// get Chuck Norris fact
+router.get('/user', (_, res) => {
+	axios
+		.get('https://api.chucknorris.io/jokes/random')
+		.then((response) => {
+			res.status(200).json(response.data);
+		})
+		.catch((error) => {
+			res.status(500).send(error);
+		});
+});
 
 // delete user
 router.delete('/user/:id', checkJwt, (req, res) => {
