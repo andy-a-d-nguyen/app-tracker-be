@@ -47,7 +47,7 @@ router.post('/user', checkJwt, (req, res) => {
 });
 
 // get Chuck Norris fact
-router.get('/user', (_, res) => {
+router.get('/user', checkJwt, (_, res) => {
 	axios
 		.get('https://api.chucknorris.io/jokes/random')
 		.then((response) => {
