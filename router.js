@@ -21,6 +21,10 @@ const checkJwt = jwt({
 	algorithms: ['RS256'],
 });
 
+router.get('/', (_, res) => {
+	res.send('Hello World');
+});
+
 // create user
 router.post('/user', checkJwt, (req, res) => {
 	User.findOne({ username: req.body.username }, async (err, user) => {
@@ -129,6 +133,10 @@ router.delete('/user/:id/jobs/:index', checkJwt, (req, res) => {
 				});
 		}
 	});
+});
+
+router.get('*', (_, res) => {
+	res.redirect('/');
 });
 
 export default router;
