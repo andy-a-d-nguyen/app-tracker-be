@@ -6,7 +6,7 @@ import router from './router.js';
 
 const app = express();
 const clientOrigin = process.env.CLIENT_ORIGIN_URL;
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT || 3001;
 
 mongoose
 	.connect(`${process.env.MONGODB_URL}`)
