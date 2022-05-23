@@ -2,7 +2,6 @@ import express from 'express';
 import { expressjwt as jwt } from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
 import axios from 'axios';
-import { parse, stringify } from 'flatted';
 import User from './db/model.js';
 
 const router = express.Router();
